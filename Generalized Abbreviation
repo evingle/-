@@ -1,0 +1,51 @@
+/*
+    word
+    
+    1ord -> 
+    1o1   -> 
+    1o2 ->
+    2rd  ->
+    3d   ->
+    w
+*/
+
+public class Solution {
+    private readonly IList<string> result = new List<string>();
+    
+    public IList<string> GenerateAbbreviations(string word) {
+        GenerateAbbreviations(word, "", 0);
+        
+        return result;
+    }
+    
+    private void GenerateAbbreviations(string word,
+                                       string preStr,
+                                       int index) {
+        if(word.Length == index)
+        {
+            if(preStr != null)
+            {
+                result.Add(preStr);    
+            }            
+            return;
+        }
+                       
+        for(var i = 0; i + index < word.Length; i++)
+        {                                          
+            var tempStr = preStr + (i + 1);
+            
+            // decides where to stop adding number.
+            if(index + i + 1 < word.Length)
+            {
+                // skips the next character.                                
+                GenerateAbbreviations(word, tempStr + word[index + i + 1], index + i + 2);
+            }else // hitting the length
+            {
+                GenerateAbbreviations(word, tempStr, index + i + 1);
+            }                        
+        }
+        
+         // decides this character does not need to be generalized.                
+        GenerateAbbreviations(word, preStr + word[index], index + 1);
+    }
+}
