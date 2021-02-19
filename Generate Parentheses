@@ -1,0 +1,40 @@
+public class Solution {    
+    public IList<string> hashSet {get; set;} = new List<string>();
+        
+    public IList<string> GenerateParenthesis(int n) {
+        var result = new List<string>();
+        if(n < 1)
+        {
+            return result;
+        }
+             
+        var arr = new char[2 * n];        
+        GenerateParenthesis(arr, 0, 0, 0, n);                            
+        return hashSet;
+    }
+        
+    private void GenerateParenthesis(char[] charArr, 
+                                     int index,
+                                     int open, 
+                                     int close, 
+                                     int max)
+    {        
+        if(index == charArr.Length)
+        {
+            hashSet.Add(new string(charArr));
+            return;
+        }
+        
+        if(open < max)
+        {
+            charArr[index++] = '(';
+            GenerateParenthesis(charArr, index--, open + 1, close, max);
+        }
+        
+        if(open > close && close < max)
+        {
+            charArr[index++] = ')';
+            GenerateParenthesis(charArr, index, open, close + 1, max);            
+        }
+    }       
+}
