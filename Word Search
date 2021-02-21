@@ -1,0 +1,96 @@
+public class Solution {
+    private HashSet<string> visited {get; set;} = new HashSet<string>();
+    
+    public bool Exist(char[][] board, string word) {
+        if(string.IsNullOrEmpty(word))
+        {
+            return true;
+        }
+        
+        if(board == null || board[0].Length < 1)
+        {
+            return false;
+        }
+        
+        for(var i = 0; i < board.Length; i++)
+        {
+            for(var j = 0; j < board[0].Length; j++)
+            {
+                visited = new HashSet<string>();
+                if(Exist(board, new int[]{i,j}, word, 0))
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    public bool Exist(char[][] board, 
+                      int[] indexes, 
+                      string word,
+                      int index) {
+        if(index == word.Length)
+        {
+            return true;
+        }
+        
+        if(indexes[0] == board.Length || indexes[1] == board[0].Length)
+        {
+            return false;
+        }
+        
+        if(board[indexes[0]][indexes[1]] == word[index])
+        {   
+            if(index == word.Length - 1)
+            {
+                return true;
+            }
+            
+            visited.Add(indexes[0] + "+" + indexes[1]);
+            
+            if(indexes[0] - 1 >= 0 && !visited.Contains((indexes[0] - 1) + "+" + indexes[1]))
+            {
+                visited.Add((indexes[0] - 1) + "+" + indexes[1]);
+                if(Exist(board, new int[]{indexes[0] - 1, indexes[1]}, word, index + 1))
+                {
+                    return true;
+                }
+                visited.Remove((indexes[0] - 1) + "+" + indexes[1]);
+            }
+            
+            if(indexes[0] + 1 < board.Length && !visited.Contains((indexes[0] + 1) + "+" + indexes[1]))
+            {
+                visited.Add((indexes[0] + 1) + "+" + indexes[1]);
+                if(Exist(board, new int[]{indexes[0] + 1, indexes[1]}, word, index + 1))
+                {
+                    return true;
+                }
+                visited.Remove((indexes[0] + 1) + "+" + indexes[1]);
+            }
+            
+            if(indexes[1] - 1 >= 0 && !visited.Contains(indexes[0] + "+" + (indexes[1] - 1)))
+            {
+                visited.Add(indexes[0] + "+" + (indexes[1] - 1));
+                if(Exist(board, new int[]{indexes[0], indexes[1] - 1}, word, index + 1))
+                {
+                    return true;
+                }
+                visited.Remove(indexes[0] + "+" + (indexes[1] - 1));
+            }
+            
+            if(indexes[1] + 1 < board[0].Length && !visited.Contains(indexes[0] + "+" + (indexes[1] + 1)))
+            {
+                visited.Add(indexes[0] + "+" + (indexes[1] + 1));
+                if(Exist(board, new int[]{indexes[0], indexes[1] + 1}, word, index + 1))
+                {
+                    return true;
+                }
+                visited.Remove(indexes[0] + "+" + (indexes[1] + 1));
+            }            
+        }
+        
+        return false;
+    }
+}
