@@ -1,0 +1,68 @@
+/*
+// Definition for a Node.
+public class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+}
+*/
+
+public class Solution {
+    public Node LowestCommonAncestor(Node p, Node q) {
+        var root1 = p;
+        var root2 = q;
+        var list1 = new List<Node>();
+        var list2 = new List<Node>();
+        while(root1.parent != null)
+        {
+            list1.Add(root1);
+            root1 = root1.parent;            
+        }
+        
+        while(root2.parent != null)
+        {
+            list2.Add(root2);
+            root2 = root2.parent;
+        }
+        
+        // if one of them is Root.
+        if(list1.Count == 0)
+        {
+            return p;
+        }
+        
+        if(list2.Count == 0)
+        {
+            return q;
+        }
+        
+        list1.Reverse();
+        list2.Reverse();
+        
+        var result = root1;
+        
+        var len = list1.Count > list2.Count ? list2.Count : list1.Count;
+        
+        for(var i = 0; i < len; i++)
+        {
+            if(list1[i] != list2[i])
+            {
+                return result;
+            }
+            
+            result = list1[i];                                     
+        }
+        
+        return list1.Count > list2.Count ? list2[len - 1] : list1[len - 1];
+    }
+    
+}
+
+/*
+            -1
+        0       3
+    -2      4   n   n
+ 8
+
+*/
