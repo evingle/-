@@ -1,0 +1,70 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+
+/*
+        3
+    5       1
+6     2     0  8
+     7 4
+
+*/
+
+public class Solution {
+    public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root == null)
+        {
+            return null;
+        }
+        
+        var left = LowestCommonAncestor(root.left, p, q);
+        var right = LowestCommonAncestor(root.right, p, q);
+        
+        if(root == p && left == q
+          || root == q && left == p
+          || root == p && right == q
+          || root == q && right == p
+          || left == q && right == p
+          || left == p && right == q)
+        {
+            Console.WriteLine(root.val);
+            return root;
+        }
+        
+        if(left == q || left == p)
+        {
+            //Console.WriteLine(left.val);
+            return left;
+        }
+        
+        if(right == q || right == p)
+        {
+            return right;
+        }
+        
+        if(root == q || root == p)
+        {
+            return root;
+        }
+        
+        //Console.WriteLine(root.val);
+        
+        if(left != null)
+        {
+            return left;
+        }
+        
+        if(right != null)
+        {
+            return right;
+        }
+        
+        return null;
+    }
+}
