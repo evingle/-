@@ -1,0 +1,80 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+
+
+/*
+    ancestors pointer soultion
+
+*/
+public class Solution {
+    IDictionary<TreeNode, TreeNode> dic = new Dictionary<TreeNode, TreeNode>();
+    
+    public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root == null)
+        {
+            return null;
+        }
+        
+        if(p == root || q == root)
+        {
+            return root;
+        }
+        dic.TryAdd(root, null);
+        SearchNode(root, p);
+        SearchNode(root, q);
+        
+        var hashset = new HashSet<TreeNode>();
+        
+        var node1 = p;
+        var node2 = q;
+        
+        while(node1 != null)
+        {
+            hashset.Add(node1);
+            node1 = dic[node1];
+        }
+        
+        while(true)
+        {                                                
+            if(hashset.Contains(node2))
+            {
+                return node2;
+            }                        
+                        
+            node2 = dic[node2];                        
+        }
+        
+        return null;
+    }
+    
+    
+    private TreeNode SearchNode(TreeNode root, TreeNode node, TreeNode ancestor = null) 
+    {
+        if(root == null)
+        {
+            return null;
+        }        
+        
+        dic.TryAdd(root, ancestor);                        
+        
+        if(root.val == node.val)
+        {
+            return root;
+        }else if(root.val > node.val)
+        {            
+            return SearchNode(root.left, node, root);
+        }else // root.val < node.val
+        {            
+            return SearchNode(root.right, node, root);
+        }
+        
+        return null;
+    }
+}
