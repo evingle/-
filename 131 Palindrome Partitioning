@@ -1,0 +1,80 @@
+/*
+            a a b 
+        a|ab aa|b aab      
+      a a| aab aab   
+
+*/
+public class Solution {
+    IList<IList<string>> result {get;set;} = new List<IList<string>>();    
+    IDictionary<string, bool> dic {get;set;} = new Dictionary<string, bool>();    
+        
+    public IList<IList<string>> Partition(string s) 
+    {
+        if(string.IsNullOrEmpty(s))
+        {
+            return result;
+        }
+               
+        Partition(s, 0, new List<string>());
+        
+        return result;
+    }
+    
+    private void Partition(string s, 
+                           int index,                           
+                           IList<string> list) 
+    {
+         if(index == s.Length)
+         {
+             //if(list.Count > 1)
+             //{
+            result.Add(new List<string>(list));    
+             //}             
+             return;
+         }
+             
+         var sb = new StringBuilder();
+         for(var i = index; i < s.Length; i++)
+         {
+             // aa
+             sb.Append(s[i]);
+             var str = sb.ToString();
+             if(!dic.ContainsKey(str))
+             {
+                 if(IsPalindrome(str))
+                 {
+                     dic.Add(str, true);
+                     list.Add(str);
+                     Partition(s, i + 1, list);
+                     list.RemoveAt(list.Count - 1);
+                 }else
+                 {
+                     dic.Add(str, false);
+                 }                 
+             }else
+             {
+                  if(dic[str])  
+                  {
+                     list.Add(str);
+                     Partition(s, i + 1, list);
+                     list.RemoveAt(list.Count - 1);
+                  }
+             }
+         }
+    }
+    
+    private bool IsPalindrome(string str)
+    {
+        var isPalindrome = true;
+        var s = 0;
+        var e = str.Length - 1;
+        while(s < e)
+        {
+            if(str[s++] != str[e--])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
