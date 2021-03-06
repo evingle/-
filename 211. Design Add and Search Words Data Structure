@@ -1,0 +1,117 @@
+/*
+    node - > arr
+
+    curr - > value
+
+
+*/
+
+
+public class WordDictionary {
+    
+    /** Initialize your data structure here. */
+    
+    Node root {get;set;}= new Node();
+    
+    public WordDictionary() {
+        root.Initial();
+    }
+    
+    public void AddWord(string word) {
+        var node = root;
+        
+        for(var i = 0; i < word.Length; i++)
+        {
+            var next = node.next[word[i]-'a'];
+            
+            if(next.val == '*')
+            {
+                next.Initial(word[i]);
+            }
+            
+            node = next;
+        }
+        
+        node.isEnd = true;
+    }
+    
+    public bool Search(string word) {
+        var node = root;        
+        var queue = new Queue<Node>();
+        
+        queue.Enqueue(node);
+        var count = 1;
+        
+        for(var i = 0; i < word.Length; i++)
+        {                                    
+            while(count-- > 0)
+            {
+                node = queue.Dequeue();
+                
+                if(word[i] == '.')
+                {
+                    foreach(var next in node.next)
+                    {
+                        if(next.val != '*')
+                        {
+                            queue.Enqueue(next);
+                        }
+                    }
+                }else
+                {
+                    var next = node.next[word[i]-'a'];
+                    //Console.WriteLine(next.val + "," + word[i] + "," + queue.Count);
+                    if(next.val == word[i])
+                    {
+                        queue.Enqueue(next);
+                    }       
+                }                                                                       
+            }   
+            
+            count = queue.Count;
+            
+            if(count == 0)
+            {
+                return false;
+            }
+        }
+        
+        while(queue.Any())
+        {
+            if(queue.Dequeue().isEnd)
+            {
+                return true;
+            }            
+        }                
+                        
+        return false;
+    }      
+    
+    class Node
+    {
+        public Node[] next = new Node[26];
+        public char val {get;set;}  
+        public bool isEnd {get;set;}        
+        
+        public Node()
+        {
+            val = '*';
+        }
+        
+        public void Initial(char c = '*')
+        {
+            val = c;
+            for(var i = 0; i < 26; i++)
+            {
+                next[i] = new Node();
+            }
+        }
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.AddWord(word);
+ * bool param_2 = obj.Search(word);
+ */
