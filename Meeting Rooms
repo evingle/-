@@ -1,0 +1,25 @@
+public class Solution {
+    public bool CanAttendMeetings(int[][] intervals) {
+        if(intervals == null || intervals.Length < 1)
+        {
+            return true;
+        }
+        
+        Array.Sort(intervals, (x,y)=>x[0].CompareTo(y[0]));                        
+        
+        var currentLatest = 0;
+        
+        foreach(var interval in intervals)
+        {
+            if(interval[0] >= currentLatest)
+            {
+                currentLatest = interval[1] > currentLatest ? interval[1] : currentLatest;                
+            }else
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
