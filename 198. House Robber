@@ -1,0 +1,19 @@
+public class Solution {
+    public int Rob(int[] nums) {
+        if(nums == null || nums.Length == 0)
+        {
+            return 0;
+        }                   
+        
+        var res = nums[0];        
+        var pre = 0;
+        for(var i = 1; i < nums.Length; i++)
+        {            
+            var tmp = res;
+            res = Math.Max(res, pre + nums[i]); 
+            pre = tmp;
+        }
+        
+        return res;
+    }
+}
