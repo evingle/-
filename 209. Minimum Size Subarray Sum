@@ -1,0 +1,26 @@
+public class Solution {
+    public int MinSubArrayLen(int target, int[] nums) {
+        if(nums == null || nums.Length < 1)
+        {
+            return -1;
+        }
+        
+        var curVal = 0;
+        var left = 0;
+        var res = int.MaxValue;
+        
+        for(var i = 0; i < nums.Length; i++)
+        {
+            curVal += nums[i];
+            
+            while(curVal >= target)
+            {
+                curVal -= nums[left];
+                res = Math.Min(res, i - left + 1);                
+                left++;
+            }
+        }
+        
+        return res == int.MaxValue ? 0 : res;
+    }    
+}
