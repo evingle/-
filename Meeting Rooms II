@@ -1,0 +1,72 @@
+public class Solution {
+    // Keeps tracking the earliest ended meeting. 
+    SortedDictionary<int, int> _meetingRooms {get; set;} = new SortedDictionary<int, int>();
+    
+    public int MinMeetingRooms(int[][] intervals) {
+        if(intervals == null || intervals.Length < 1)
+        {
+            return 0;
+        }
+        
+        Array.Sort(intervals, (x,y)=>{
+            return x[0].CompareTo(y[0]);                       
+        });                        
+
+        foreach(var interval in intervals)
+        {            
+            if(_meetingRooms.Count < 1)
+            {                               
+                BookMeetingRoomsAndWithdrawEndedOne(interval[0], interval[1], true);
+                continue;
+            }
+            
+           BookMeetingRoomsAndWithdrawEndedOne(interval[0], interval[1]);
+        }
+        
+        var res = 0;
+            
+        foreach(var meetingRoom in _meetingRooms)    
+        {
+            res+=meetingRoom.Value;
+        }
+        
+        return res;
+    }
+    
+    public void BookMeetingRoomsAndWithdrawEndedOne(int start, int end, bool first = false)
+    {
+        if(!first)
+        {
+             var finishedMeetingKey = -1;
+                
+            foreach(var meetingRoom in _meetingRooms)
+            {
+                if(meetingRoom.Key <= start)
+                {
+                    finishedMeetingKey = meetingRoom.Key;                                
+                }
+
+                break; 
+            }
+
+            if(finishedMeetingKey != -1)
+            {
+                if(_meetingRooms[finishedMeetingKey] > 1)   
+                {
+                    _meetingRooms[finishedMeetingKey]--;
+                }else
+                {
+                    _meetingRooms.Remove(finishedMeetingKey);
+                }
+            }
+        }               
+        
+        if(_meetingRooms.ContainsKey(end))
+        {
+            _meetingRooms[end]++;
+        }else
+        {
+            _meetingRooms.Add(end, 1);
+        }
+    }
+}
