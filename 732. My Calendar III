@@ -1,0 +1,48 @@
+public class MyCalendarThree {
+    SortedDictionary<int, int> _bookings {get;set;} = new SortedDictionary<int, int>();
+    
+    public MyCalendarThree() {
+        
+    }
+    
+    public int Book(int start, int end) {
+        
+        Books(start, end);
+        
+        var res = 0;
+        var a = 0;
+        foreach(var booking in _bookings)
+        {
+            a += booking.Value;
+            
+            res = Math.Max(res, a);
+        }
+        
+        return res;
+    }    
+    
+    private void Books(int start, int end)
+    {
+        if(_bookings.ContainsKey(start))
+        {
+            _bookings[start]++;
+        }else
+        {
+            _bookings.Add(start, 1);
+        }
+                
+        if(_bookings.ContainsKey(end))
+        {
+            _bookings[end]--;
+        }else
+        {
+            _bookings.Add(end, -1);
+        }
+    }        
+}
+
+/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * MyCalendarThree obj = new MyCalendarThree();
+ * int param_1 = obj.Book(start,end);
+ */
