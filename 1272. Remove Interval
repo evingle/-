@@ -1,0 +1,39 @@
+public class Solution {
+    public IList<IList<int>> RemoveInterval(int[][] intervals, int[] toBeRemoved) {
+        var res = new List<IList<int>>();
+        
+        foreach(var interval in intervals)
+        {            
+            if(interval[1] < toBeRemoved[0] || interval[0] > toBeRemoved[1])
+            {
+                res.Add(interval);
+            }else // overlapped
+            {
+                if(toBeRemoved[0] < interval[0] && toBeRemoved[1] < interval[1])
+                {
+                    interval[0] = toBeRemoved[1];
+                    res.Add(interval);
+                }else if(toBeRemoved[0] > interval[0] && toBeRemoved[1] > interval[1])
+                {
+                    interval[1] = toBeRemoved[0];
+                    res.Add(interval);
+                }else if(toBeRemoved[0] >= interval[0] && toBeRemoved[1] <= interval[1])
+                {
+                    if(toBeRemoved[0] != interval[0])
+                    {
+                        var left = new int[]{interval[0], toBeRemoved[0]};
+                        res.Add(left);
+                    }
+                    
+                    if(toBeRemoved[1] != interval[1])
+                    {
+                        interval[0] = toBeRemoved[1];                    
+                        res.Add(interval);
+                    }                                                           
+                }
+            }
+        }
+        
+        return res;
+    }
+}
